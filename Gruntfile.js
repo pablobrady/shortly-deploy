@@ -3,6 +3,12 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      dist: {
+          src: [
+            'public/client/**.js'
+          ],
+          dest: 'public/dist/client_concat.js',
+      }
     },
 
     mochaTest: {
@@ -21,11 +27,15 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      dist: {
+          src:  'public/dist/client_concat.js',
+          dest: 'public/dist/client_dist.js',
+      }
     },
 
     jshint: {
       files: [
-        // Add filespec list here
+        'public/client/**.js', 'server*.js'
       ],
       options: {
         force: 'true',
@@ -46,7 +56,7 @@ module.exports = function(grunt) {
           'public/client/**/*.js',
           'public/lib/**/*.js',
         ],
-        tasks: [
+      tasks: [
           'concat',
           'uglify'
         ]
@@ -108,5 +118,9 @@ module.exports = function(grunt) {
     // add your deploy tasks here
   ]);
 
-
+  // grunt.registerTask('local', ['jshint', 'concat', 'uglify']); // this is the order of tasks
+  grunt.registerTask('dist',   ['jshint', 'concat', 'uglify']); // this is the order of tasks
 };
+// jshint runs error check (lint free)
+// concat joins mutiple files into one
+// uglify minifies files, use concat files only
